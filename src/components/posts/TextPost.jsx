@@ -3,6 +3,7 @@ import { toast } from 'react-hot-toast';
 import PostModal from '../PostModal';
 import '../../styles/TextPost.css';
 import PreviousButton from '../PreviousButton';
+import API_ENDPOINTS from '../../config/api';
 
 const TextPost = ({ onSubmit }) => {
     const [content, setContent] = useState('');
@@ -19,7 +20,7 @@ const TextPost = ({ onSubmit }) => {
 
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:5002/api/posts/generate', {
+            const response = await fetch(API_ENDPOINTS.GENERATE_CONTENT, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +78,7 @@ const TextPost = ({ onSubmit }) => {
                 scheduledTime: isScheduled ? scheduledDate : null
             };
 
-            const response = await fetch('http://localhost:5002/api/posts/text', {
+            const response = await fetch(API_ENDPOINTS.TEXT_POST, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

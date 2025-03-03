@@ -4,6 +4,7 @@ import PostModal from '../PostModal';
 import '../../styles/PhotoPost.css';
 import { auth } from '../../config/firebase';
 import PreviousButton from '../PreviousButton';
+import API_ENDPOINTS from '../../config/api';
 
 const PhotoPost = ({ onSubmit }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -42,7 +43,7 @@ const PhotoPost = ({ onSubmit }) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch('http://localhost:5002/api/posts/generate', {
+            const response = await fetch(API_ENDPOINTS.GENERATE_CONTENT, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,6 +86,15 @@ const PhotoPost = ({ onSubmit }) => {
             return;
         }
 
+        // Validate scheduled date
+        if (isScheduled) {
+            const scheduleTime = new Date(scheduledDate);
+            if (scheduleTime <= new Date()) {
+                toast.error('Schedule time must be in the future');
+                return;
+            }
+        }
+
         setLoading(true);
         setError(null);
 
@@ -96,7 +106,7 @@ const PhotoPost = ({ onSubmit }) => {
         }
 
         try {
-            const response = await fetch('http://localhost:5002/api/posts/photo', {
+            const response = await fetch(API_ENDPOINTS.PHOTO_POST, {
                 method: 'POST',
                 body: formData
             });
@@ -107,7 +117,7 @@ const PhotoPost = ({ onSubmit }) => {
                 throw new Error(data.error || data.details || 'Failed to create post');
             }
             
-            toast.success(isScheduled ? 'Post scheduled successfully!' : 'Post created successfully!');
+            toast.success(data.message || (isScheduled ? 'Post scheduled successfully!' : 'Post created successfully!'));
             setShowModal(false);
             
             // Reset form
