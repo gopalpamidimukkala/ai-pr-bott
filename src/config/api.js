@@ -2,7 +2,7 @@
 const isDevelopment = import.meta.env.MODE === 'development';
 
 // Get the API URL from environment variables
-const API_BASE_URL = import.meta.env.VITE_API_URL || (isDevelopment ? 'http://localhost:5002' : '');
+const API_BASE_URL = import.meta.env.VITE_API_URL || (isDevelopment ? 'ai-pr-bot-backend-production.up.railway.app' : '');
 
 // Log environment information
 console.log('Current environment:', import.meta.env.MODE);
