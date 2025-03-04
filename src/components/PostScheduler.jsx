@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import '../styles/PostScheduler.css';
+import { API_ENDPOINTS } from '../config/api';
 
 function PostScheduler({ content, onRegenerateContent, isLoading, setIsLoading }) {
   const [schedulePost, setSchedulePost] = useState(false);
@@ -14,7 +15,7 @@ function PostScheduler({ content, onRegenerateContent, isLoading, setIsLoading }
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5002/api/posts', {
+      const response = await fetch(API_ENDPOINTS.POSTS, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -9,20 +9,26 @@
   ],
   "routes": [
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/assets/(.*)",
-      "headers": { "cache-control": "public, max-age=31536000, immutable" },
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      },
       "continue": true
     },
     {
-      "src": "/api/(.*)",
-      "headers": { "cache-control": "public, max-age=0, must-revalidate" }
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "src": "/.*",
+      "dest": "/index.html",
+      "headers": {
+        "Access-Control-Allow-Origin": "https://ai-pr-bot-backend-production.up.railway.app",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+      }
     }
   ],
-  "github": {
-    "silent": true
+  "env": {
+    "NODE_ENV": "production"
   }
 } 

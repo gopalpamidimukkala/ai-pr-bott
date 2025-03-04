@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import '../styles/ContentGenerator.css';
+import { API_ENDPOINTS } from '../config/api';
 
 function ContentGenerator({ onContentGenerated, isLoading, setIsLoading }) {
   const [prompt, setPrompt] = useState('');
@@ -14,7 +15,7 @@ function ContentGenerator({ onContentGenerated, isLoading, setIsLoading }) {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5002/api/posts/generate', {
+      const response = await fetch(API_ENDPOINTS.GENERATE_CONTENT , {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt })

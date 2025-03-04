@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PostTypeSelector from './PostTypeSelector';
 import '../styles/Home.css';
-
+import { API_ENDPOINTS } from '../config/api';
 const Home = () => {
     const [recentPosts, setRecentPosts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ const Home = () => {
     const fetchRecentPosts = async () => {
         try {
             setError(null);
-            const response = await fetch('http://localhost:5002/api/posts/recent', {
+            const response = await fetch(API_ENDPOINTS.RECENT_POSTS, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,13 +38,20 @@ const Home = () => {
         }
     };
 
-    const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleString('en-US', {
+    const formatDate = (dateString, isScheduledTime = false) => {
+        const date = new Date(dateString);
+        // If it's a scheduled time, convert from UTC to IST by subtracting 5.5 hours
+        const adjustedDate = isScheduledTime 
+            ? new Date(date.getTime() - (5.5 * 60 * 60 * 1000))
+            : date;
+            
+        return adjustedDate.toLocaleString('en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
+            hour12: true
         });
     };
 
@@ -107,7 +114,7 @@ const Home = () => {
                                         {post.scheduledTime && (
                                             <div className="scheduled-time">
                                                 <i className="fas fa-calendar"></i>
-                                                Scheduled: {formatDate(post.scheduledTime)}
+                                                Scheduled: {formatDate(post.scheduledTime, true)}
                                             </div>
                                         )}
                                         <div className="posted-time">
